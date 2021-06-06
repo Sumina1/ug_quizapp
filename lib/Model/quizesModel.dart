@@ -1,6 +1,4 @@
-// To parse this JSON data, do
-//
-//     final welcome = welcomeFromJson(jsonString);
+
 
 import 'dart:convert';
 
@@ -235,3 +233,4 @@ class Pagination {
     "total": total,
   };
 }
+

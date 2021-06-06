@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ug_quizapp/fetechapi.dart';
-import 'package:ug_quizapp/selectquiz.dart';
-
-
-const BASE_URL = 'https://staging.ugbazaar.com/api/V2';
+import 'package:ug_quizapp/UI/selectquiz.dart';
+const BASE_URL = 'https://staging.ugbazaar.com/api/V2/quiz';
 
 
 void main() {
@@ -18,7 +15,6 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
 
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: SelectQuiz(),
