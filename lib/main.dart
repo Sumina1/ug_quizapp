@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ug_quizapp/fetechapi.dart';
-import 'package:ug_quizapp/quizui.dart';
+import 'package:ug_quizapp/selectquiz.dart';
+
 
 const BASE_URL = 'https://staging.ugbazaar.com/api/V2';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: QUIZ_UI(),
+      home: SelectQuiz(),
     );
   }
 }

@@ -15,12 +15,15 @@ class FetchApi {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = Welcome.fromJson(jsonDecode(response.body));
+      print(data.data.all[0].name);
       return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load ');
     }
+
+
   }
 
 }
