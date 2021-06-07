@@ -1,22 +1,21 @@
 
-import 'dart:html';
 
 import 'package:http/http.dart' as http;
 
 import 'dart:convert';
-
+List questions;
 Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
 String welcomeToJson(Welcome data) => json.encode(data.toJson());
 
 class Welcome {
   Welcome({
-    this.meta,
+     this.meta,
     this.data,
     this.message,
   });
 
-  Meta meta;
+   Meta meta;
   Data data;
   String message;
 
@@ -306,11 +305,7 @@ class GetQuiz{
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = Welcome.fromJson(jsonDecode(response.body));
-      //"options": List<dynamic>.from(options.map((x) => x.toJson())),
-      print(data.data.quiz.questions[0].options.map((x) => x.value));
-      print(data.data.quiz.questions[0].options[0].value);
-      // factory Option.fromJson(Map<String, dynamic> json)
-print(data.data.quiz.questions[0].question);
+
       return data;
     } else {
       // If the server did not return a 200 OK response,

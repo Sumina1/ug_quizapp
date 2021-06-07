@@ -12,9 +12,9 @@ class SelectQuiz extends StatefulWidget {
 
 class _SelectQuizState extends State<SelectQuiz> {
   FetchApi obj = FetchApi();
+  Color rgba =  Color(0xFF42A5F5);
 
   @override
-
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +47,9 @@ class _SelectQuizState extends State<SelectQuiz> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white
                             ),
+                         // color: Color(int.parse(snapshot.data.data.banner.backgroundColor
 
-                            child: Center(child: Text('${snapshot.data.data.all[index].name}'))),
+                            child: Center(child: Text('${snapshot.data.data.all[index].name}',)))
                       );
                   }
               );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 
 
 
@@ -15,6 +16,7 @@ class FetchApi {
       // then parse the JSON.
       var data = Welcome.fromJson(jsonDecode(response.body));
       print(data.data.all[0].name);
+      print(data.data.banner.backgroundColor);
 
       return data;
     } else {
@@ -23,6 +25,7 @@ class FetchApi {
       throw Exception('Failed to load ');
     }
   }
+
 
 
 
