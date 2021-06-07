@@ -181,6 +181,7 @@ class Question {
     "caption": caption,
     "hint": hint == null ? null : hint,
     "options": List<dynamic>.from(options.map((x) => x.toJson())),
+
   };
 }
 
@@ -305,7 +306,11 @@ class GetQuiz{
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = Welcome.fromJson(jsonDecode(response.body));
-      print(data.data.quiz.slug);
+      //"options": List<dynamic>.from(options.map((x) => x.toJson())),
+      print(data.data.quiz.questions[0].options.map((x) => x.value));
+      print(data.data.quiz.questions[0].options[0].value);
+      // factory Option.fromJson(Map<String, dynamic> json)
+print(data.data.quiz.questions[0].question);
       return data;
     } else {
       // If the server did not return a 200 OK response,
@@ -319,3 +324,4 @@ class GetQuiz{
 
 
 }
+

@@ -3,8 +3,6 @@ import 'dart:convert';
 
 
 import 'package:ug_quizapp/Model/quizesModel.dart';
-
-
 import 'package:http/http.dart' as http;
 class FetchApi {
 
@@ -17,6 +15,7 @@ class FetchApi {
       // then parse the JSON.
       var data = Welcome.fromJson(jsonDecode(response.body));
       print(data.data.all[0].name);
+
       return data;
     } else {
       // If the server did not return a 200 OK response,
