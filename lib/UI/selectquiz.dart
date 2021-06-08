@@ -50,8 +50,13 @@ class _SelectQuizState extends State<SelectQuiz> {
                          // color: Color(int.parse(snapshot.data.data.banner.backgroundColor
 
                             child: Center(child: Text('${snapshot.data.data.all[index].name}',)))
+
                       );
+
+
                   }
+
+
               );
             }
             else {

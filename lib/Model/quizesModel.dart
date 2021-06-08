@@ -2,12 +2,12 @@
 
 import 'dart:convert';
 
-Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
+QuizesModel QuizesModelFromJson(String str) => QuizesModel.fromJson(json.decode(str));
 
-String welcomeToJson(Welcome data) => json.encode(data.toJson());
+String QuizesModelToJson(QuizesModel data) => json.encode(data.toJson());
 
-class Welcome {
-  Welcome({
+class QuizesModel{
+  QuizesModel({
     this.meta,
     this.data,
     this.message,
@@ -17,7 +17,7 @@ class Welcome {
   Data data;
   String message;
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+  factory QuizesModel.fromJson(Map<String, dynamic> json) => QuizesModel(
     meta: Meta.fromJson(json["meta"]),
     data: Data.fromJson(json["data"]),
     message: json["message"],

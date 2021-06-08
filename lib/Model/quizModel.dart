@@ -4,12 +4,12 @@ import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 List questions;
-Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
+QuizModel QuizModelFromJson(String str) => QuizModel.fromJson(json.decode(str));
 
-String welcomeToJson(Welcome data) => json.encode(data.toJson());
+String QuizModelToJson(QuizModel data) => json.encode(data.toJson());
 
-class Welcome {
-  Welcome({
+class QuizModel {
+  QuizModel({
      this.meta,
     this.data,
     this.message,
@@ -19,7 +19,7 @@ class Welcome {
   Data data;
   String message;
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+  factory QuizModel.fromJson(Map<String, dynamic> json) => QuizModel(
     meta: Meta.fromJson(json["meta"]),
     data: Data.fromJson(json["data"]),
     message: json["message"],
@@ -297,14 +297,14 @@ class Meta {
 }
 class GetQuiz{
 
-  Future<Welcome> fetechquizdata(String slug) async {
+  Future<QuizModel> fetechquizdata(String slug) async {
     final response =
     await http.get(Uri.parse('https://staging.ugbazaar.com/api/V2/quiz/${slug}'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var data = Welcome.fromJson(jsonDecode(response.body));
+      var data = QuizModel.fromJson(jsonDecode(response.body));
 
       return data;
     } else {
@@ -316,6 +316,7 @@ class GetQuiz{
 
 
   }
+
 
 
 }
