@@ -1,8 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
-
-
-
 import 'package:ug_quizapp/Model/quizesModel.dart';
 import 'package:http/http.dart' as http;
 class FetchApi {
@@ -10,13 +6,11 @@ class FetchApi {
   Future<QuizesModel> fetechdata() async {
     final response =
     await http.get(Uri.parse('https://staging.ugbazaar.com/api/V2/quiz/'));
-    print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = QuizesModel.fromJson(jsonDecode(response.body));
-      print(data.data.all[0].name);
-      print(data.data.banner.backgroundColor);
+
 
       return data;
     } else {

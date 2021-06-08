@@ -1,5 +1,4 @@
 
-import 'dart:html';
 
 import 'package:http/http.dart' as http;
 
@@ -74,7 +73,6 @@ class Meta {
 class FetchPeekaboo {
   Future<Helpline> createPeekaboo(int id) async {
 var Url = Uri.parse('https://staging.ugbazaar.com/api/V2/quiz/${id}/peekaboo');
-    print("check");
     //http.Response response = await http.get(url);
      http.Response response = await http.post(Url);
       response.statusCode;

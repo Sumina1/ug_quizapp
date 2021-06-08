@@ -21,6 +21,10 @@ class _StartQuizState extends State<StartQuiz> {
   String value= '';
   int points =0;
   int initialindex = 0;
+  String peekaboovalue = '';
+  List peekaboovalues;
+
+  Color containercolor = Colors.white;
   GetQuiz getQuizobj = GetQuiz();
    FetchPeekaboo getHelpline = FetchPeekaboo();
   @override
@@ -30,60 +34,57 @@ class _StartQuizState extends State<StartQuiz> {
   }
   @override
   Widget build(BuildContext context) {
+
     return  Scaffold(
       body: SingleChildScrollView(
         child: FutureBuilder(
             future: futureQuiz,
 
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              print(initialindex);
               if (snapshot.data != null) {
+
                 return Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      ElevatedButton(onPressed: ()  {
+                      ElevatedButton(onPressed: ()  async{
+                          var value = await getHelpline.createPeekaboo(snapshot.data.data.quiz.questions[initialindex].id);
+                          peekaboovalues=value.data;
+                          print(peekaboovalues);
+                          setState(() {
 
-
-                          print(snapshot.data.data.quiz.questions[initialindex].id);
-
-                          getHelpline.createPeekaboo(snapshot.data.data.quiz.questions[initialindex].id).then((value) => print(value.data[0].id));
-
-
-
-
-
+                          });
 
                       },
                           child: Text('Pekaaboo')),
-
                       SizedBox(height: MediaQuery.of(context).size.height*0.02,),
                       Container(
                           child: Text('${snapshot.data.data.quiz.questions[initialindex].question}', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black))),
                       ListView.builder(
-
                           itemCount: snapshot.data.data.quiz.questions[initialindex].options.length,
                           shrinkWrap: true,
                           primary: false,
                           itemBuilder: (BuildContext context, int index){
+                            if(peekaboovalues!=null){
+                              peekaboovalue="${peekaboovalues[index].percent.toString()}%";
+                            }
                             return Padding(
-
                               padding:  EdgeInsets.all(10),
                               child: InkWell(
                                 onTap: (){
                                   setState(() {
                                     if(initialindex < snapshot.data.data.quiz.questions.length -1){
-
                                     if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==true){
                                       points = points + snapshot.data.data.quiz.questions[initialindex].options[index].point;
-                                      print(points);
-
                                       initialindex = initialindex+1;
+                                      containercolor = Colors.green;
+
+
                                     }
                                     else {
                                       points = points - snapshot.data.data.quiz.questions[initialindex].options[index].point;
                                       initialindex = initialindex+1;
-
+                                      containercolor = Colors.white;
 
                                     }   }
 
@@ -95,10 +96,18 @@ class _StartQuizState extends State<StartQuiz> {
                                   width: MediaQuery.of(context).size.width*0.1,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
+                                    color: containercolor,
                                       borderRadius: BorderRadius.circular(4),
                                       border: Border.all(color: Colors.black,)),
-                                  child: Text('${snapshot.data.data.quiz.questions[initialindex].options[index].value}',
-                                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black)),),
+                                  child: Row(
+
+                                    children: [
+                                      Text('${snapshot.data.data.quiz.questions[initialindex].options[index].value}',
+                                          style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black)),
+                                      SizedBox(width: 20,),
+                                      Text("${peekaboovalue}")
+                                    ],
+                                  ),),
                               ),
                             );}
                       ),
@@ -119,6 +128,15 @@ class _StartQuizState extends State<StartQuiz> {
       ),
     );
   }
+   Color getColorForOption(Option option, Question question) {
+     final isSelected = option == questions[initialindex].question;
+
+     if (!isSelected) {
+       return Colors.grey.shade200;
+     } else {
+       return option.isCorrect ? Colors.green : Colors.red;
+     }
+   }
 
 }
 
