@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:ug_quizapp/Model/helpline.dart';
 import 'package:ug_quizapp/Model/quizModel.dart';
+import 'package:ug_quizapp/UI/gauge.dart';
+import 'package:ug_quizapp/UI/selectquiz.dart';
 
 
 class StartQuiz extends StatefulWidget {
@@ -104,7 +106,6 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                             if(peekaboovalues!=null){
                               peekaboovalue="${peekaboovalues[index].percent.toString()}%";
                             }
-
                             return Padding(
                               padding:  EdgeInsets.all(10),
                               child: SlideTransition(
@@ -126,13 +127,31 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                                         rightColor = Colors.white;
                                         wrongColor=Colors.white;
                                         if(initialindex < snapshot.data.data.quiz.questions.length -1){
+
+
                                           if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==true){
                                             points = points + snapshot.data.data.quiz.questions[initialindex].options[index].point;
                                             initialindex = initialindex+1;}
                                           else {
                                             points = points - snapshot.data.data.quiz.questions[initialindex].options[index].point;
                                             initialindex = initialindex+1;
-                                          }   }
+
+                                          }   }else{  Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => Gauge (value: points + snapshot.data.data.quiz.questions[initialindex].options[index].point, annotation: 'Total Score is ',pointerColor: Colors.red,)),
+                                        );
+                                        Future.delayed(const Duration(seconds: 3), () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => SelectQuiz(),)
+                                          );
+
+                                        });
+
+
+
+
+                                        }
 
                                       });
 
