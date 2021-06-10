@@ -20,7 +20,9 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
    Future<QuizModel> futureQuiz;
    Future<Helpline> futurehelpline;
    AnimationController _containerController;
+   AnimationController _wrongContainerController;
    Animation<Offset> _containerOffsetAnimation;
+ Animation<Offset>  _wrongcontainerOffsetAnimation;
   String value= '';
   int points =0;
   int initialindex = 0;
@@ -32,10 +34,12 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
   GetQuiz getQuizobj = GetQuiz();
     SubmitApi _submitApi = SubmitApi();
    FetchPeekaboo getHelpline = FetchPeekaboo();
-   double animationval = 0.0;
+var animationcontroller;
    int tappedindex=-1;
    Submit submitModel;
    List  selectedanswers = new List();
+   double beginval = 0.0;
+   double endval = 0.0;
 
 
    @override
@@ -51,17 +55,29 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
     )..repeat(reverse: true);
 
     _containerOffsetAnimation=Tween<Offset>(
-      begin: Offset(animationval,0),
-      end: Offset(0,0.0),
+      begin: Offset(beginval,0.0),
+      end: Offset(endval,0.0),
     ).animate(CurvedAnimation(parent:_containerController,curve: Curves.elasticInOut));
+    _wrongContainerController=AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
 
-  }
+    _wrongcontainerOffsetAnimation=Tween<Offset>(
+      begin: Offset(0.0,0.0),
+      end: Offset(0.0,0.0),
+    ).animate(CurvedAnimation(parent:_wrongContainerController,curve: Curves.elasticInOut));
+
+
+   }
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
 
     _containerController.dispose();
+    _wrongContainerController.dispose();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -83,8 +99,6 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                           peekaboovalues=value.data;
 
                           setState(() {
-
-
                           });
 
                       },
@@ -97,19 +111,28 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                           shrinkWrap: true,
                           primary: false,
                           itemBuilder: (BuildContext context, int index){
-                            if (snapshot.hasData) {
-                              _containerController.forward();
+                            if(snapshot.hasData){
+
+
                             }
+
                             if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==true){
                               print(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect);
                               containercolor= rightColor;
+                              animationcontroller= _containerOffsetAnimation;
+
+
                             }
                             else if(tappedindex==index){
+                              animationcontroller=_wrongcontainerOffsetAnimation;
 
                               containercolor=wrongColor;
+
                             }
                             else{
+                             animationcontroller= _containerOffsetAnimation;
                               containercolor=Colors.white;
+
                             }
                             if(peekaboovalues!=null){
                               peekaboovalue="${peekaboovalues[index].percent.toString()}%";
@@ -117,13 +140,14 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                             return Padding(
                               padding:  EdgeInsets.all(10),
                               child: SlideTransition(
-                                position: _containerOffsetAnimation,
+                                position: animationcontroller,
+                                transformHitTests: false,
                                 child: InkWell(
                                   onTap: (){
+
                                     Map answers = {'questionId':snapshot.data.data.quiz.questions[initialindex].id,
                                       'answerId':snapshot.data.data.quiz.questions[initialindex].options[index].id};
-                                    Answer answerobj = new Answer( questionId:snapshot.data.data.quiz.questions[initialindex].options[index].id,
-                                        answerId:snapshot.data.data.quiz.questions[initialindex].options[index].id);
+
                                     if( selectedanswers.length==0
                                     ){
                                       //map((x) => Answer.fromJson(x)
@@ -135,23 +159,47 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                                     if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==false){
                                       tappedindex=index;
                                       wrongColor=Colors.red;
+                                      setState(() {
+                                        _wrongContainerController=AnimationController(
+                                          duration: Duration(seconds: 1),
+                                          vsync: this,
+                                        )..repeat(reverse: false);
+
+                                        _wrongcontainerOffsetAnimation=Tween<Offset>(
+                                          begin: Offset(0.04,0.0),
+                                          end: Offset(0.0,0.0),
+                                        ).animate(CurvedAnimation(parent:_wrongContainerController,curve: Curves.elasticInOut));
+
+
+
+
+
+
+
+                                      });
+
+
+
                                     }
                                     setState(() {
-                                      rightColor = Colors.green;
-
+                                      rightColor=Colors.green;
                                     });
+
 
                                     Future.delayed(const Duration(seconds: 2), () {
                                       setState(() {
                                         peekaboovalues= null;
                                         peekaboovalue="";
                                         containercolor=Colors.white;
+                                        _wrongcontainerOffsetAnimation=Tween<Offset>(
+                                          begin: Offset(0,0.0),
+                                          end: Offset(0.0,0.0),
+                                        ).animate(CurvedAnimation(parent:_wrongContainerController,curve: Curves.elasticInOut));
+
                                         rightColor = Colors.white;
                                         wrongColor=Colors.white;
+
                                         if(initialindex < snapshot.data.data.quiz.questions.length -1){
-
-
-
                                           if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==true){
                                             points = points + snapshot.data.data.quiz.questions[initialindex].options[index].point;
                                             initialindex = initialindex+1;}
@@ -172,13 +220,7 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                                               print(selectedanswers);
                                           _submitApi.submit(snapshot.data.data.quiz.id,"Name",false,selectedanswers);
 
-
-
-
                                         });
-
-
-
 
 
                                         }
@@ -195,7 +237,7 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: containercolor,
-                                        borderRadius: BorderRadius.circular(4),
+                                        borderRadius: BorderRadius.circular(20),
                                         border: Border.all(color: Colors.black,)),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
