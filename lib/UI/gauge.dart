@@ -44,5 +44,6 @@ class _GaugeState extends State<Gauge> {
               ] ),]
       ),
     );
+
   }
 }

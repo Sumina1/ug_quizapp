@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:ug_quizapp/DataFetch/fetechapi.dart';
 import 'package:ug_quizapp/Model/helpline.dart';
 import 'package:ug_quizapp/Model/quizModel.dart';
+import 'package:ug_quizapp/Model/submit.dart';
 import 'package:ug_quizapp/UI/gauge.dart';
 import 'package:ug_quizapp/UI/selectquiz.dart';
 
@@ -28,10 +30,15 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
   Color wrongColor = Colors.white;
   Color containercolor = Colors.white;
   GetQuiz getQuizobj = GetQuiz();
+    SubmitApi _submitApi = SubmitApi();
    FetchPeekaboo getHelpline = FetchPeekaboo();
    double animationval = 0.0;
    int tappedindex=-1;
-  @override
+   Submit submitModel;
+   List  selectedanswers = new List();
+
+
+   @override
   void initState() {
     super.initState();
 
@@ -74,8 +81,9 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                       ElevatedButton(onPressed: ()  async{
                           var value = await getHelpline.createPeekaboo(snapshot.data.data.quiz.questions[initialindex].id);
                           peekaboovalues=value.data;
-                          print(peekaboovalues);
+
                           setState(() {
+
 
                           });
 
@@ -112,6 +120,18 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                                 position: _containerOffsetAnimation,
                                 child: InkWell(
                                   onTap: (){
+                                    Map answers = {'questionId':snapshot.data.data.quiz.questions[initialindex].id,
+                                      'answerId':snapshot.data.data.quiz.questions[initialindex].options[index].id};
+                                    Answer answerobj = new Answer( questionId:snapshot.data.data.quiz.questions[initialindex].options[index].id,
+                                        answerId:snapshot.data.data.quiz.questions[initialindex].options[index].id);
+                                    if( selectedanswers.length==0
+                                    ){
+                                      //map((x) => Answer.fromJson(x)
+                                    selectedanswers =[answers];}
+                                    else{
+                                      selectedanswers.add(answers);
+                                    }
+
                                     if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==false){
                                       tappedindex=index;
                                       wrongColor=Colors.red;
@@ -123,10 +143,13 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
 
                                     Future.delayed(const Duration(seconds: 2), () {
                                       setState(() {
+                                        peekaboovalues= null;
+                                        peekaboovalue="";
                                         containercolor=Colors.white;
                                         rightColor = Colors.white;
                                         wrongColor=Colors.white;
                                         if(initialindex < snapshot.data.data.quiz.questions.length -1){
+
 
 
                                           if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==true){
@@ -146,7 +169,14 @@ class _StartQuizState extends State<StartQuiz> with TickerProviderStateMixin{
                                             MaterialPageRoute(builder: (context) => SelectQuiz(),)
                                           );
 
+                                              print(selectedanswers);
+                                          _submitApi.submit(snapshot.data.data.quiz.id,"Name",false,selectedanswers);
+
+
+
+
                                         });
+
 
 
 

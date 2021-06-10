@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:ug_quizapp/Model/quizesModel.dart';
 import 'package:http/http.dart' as http;
 class FetchApi {
@@ -12,6 +13,7 @@ class FetchApi {
       var data = QuizesModel.fromJson(jsonDecode(response.body));
 
 
+
       return data;
     } else {
       // If the server did not return a 200 OK response,
@@ -21,9 +23,6 @@ class FetchApi {
   }
 
 
+  }
 
-
-
-
-}
 
