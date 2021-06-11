@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:ug_quizapp/UI/selectquiz.dart';
 
-class FirstPage extends StatefulWidget {
+class Welcome extends StatefulWidget {
+  final scores;
+
+  const Welcome({Key key, this.scores}) : super(key: key);
 
   @override
-  _FirstPageState createState() => _FirstPageState();
+  _WelcomeState createState() => _WelcomeState();
 }
 
-class _FirstPageState extends State<FirstPage> {
+class _WelcomeState extends State<Welcome> {
   TextEditingController _nicknameController = TextEditingController();
   bool _anonymous = false;
+  int score = 0;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
 
         body: Padding(
@@ -18,7 +24,6 @@ class _FirstPageState extends State<FirstPage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-
               Text('Your Nickname: ', style: TextStyle(fontSize: 30, ),),
               SizedBox(height: 10,),
               TextField(
@@ -43,16 +48,25 @@ class _FirstPageState extends State<FirstPage> {
               },),
               SizedBox(height: 10,),
               ElevatedButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SelectQuiz(anonymous: _anonymous, nickname: _nicknameController.text,)),
+                );
                 setState(() {
                   _nicknameController.text;
                 });
-
-
-
               },
                   child: Text('Start Play')),
-              SizedBox(height: 20),
-              Text('${_nicknameController.text}')
+              SizedBox(height: 10,),
+
+              Container(
+
+                  child: Text(' ${widget.scores}')),
+
+
+
+
+
 
 
 

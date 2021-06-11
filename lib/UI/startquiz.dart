@@ -6,12 +6,17 @@ import 'package:ug_quizapp/Model/quizModel.dart';
 import 'package:ug_quizapp/Model/submit.dart';
 import 'package:ug_quizapp/UI/gauge.dart';
 import 'package:ug_quizapp/UI/selectquiz.dart';
+import 'package:ug_quizapp/UI/welcome.dart';
 
 
 class StartQuiz extends StatefulWidget {
   final slug;
+  final nickname;
+  final anonymous;
 
-  const StartQuiz({Key key, this.slug}) : super(key: key);
+
+
+  const StartQuiz({Key key, this.slug, this.nickname, this.anonymous}) : super(key: key);
   @override
   _StartQuizState createState() => _StartQuizState();
 
@@ -97,10 +102,8 @@ var animationcontroller;
                       ElevatedButton(onPressed: ()  async{
                           var value = await getHelpline.createPeekaboo(snapshot.data.data.quiz.questions[initialindex].id);
                           peekaboovalues=value.data;
-
                           setState(() {
                           });
-
                       },
                           child: Text('Pekaaboo')),
                       SizedBox(height: MediaQuery.of(context).size.height*0.02,),
@@ -113,14 +116,11 @@ var animationcontroller;
                           itemBuilder: (BuildContext context, int index){
                             if(snapshot.hasData){
 
-
                             }
-
                             if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==true){
                               print(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect);
                               containercolor= rightColor;
                               animationcontroller= _containerOffsetAnimation;
-
 
                             }
                             else if(tappedindex==index){
@@ -144,7 +144,6 @@ var animationcontroller;
                                 transformHitTests: false,
                                 child: InkWell(
                                   onTap: (){
-
                                     Map answers = {'questionId':snapshot.data.data.quiz.questions[initialindex].id,
                                       'answerId':snapshot.data.data.quiz.questions[initialindex].options[index].id};
 
@@ -214,17 +213,15 @@ var animationcontroller;
                                         Future.delayed(const Duration(seconds: 3), () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => SelectQuiz(),)
+                                            MaterialPageRoute(builder: (context) => Welcome(scores: 'Your score is:  ${points + snapshot.data.data.quiz.questions[initialindex].options[index].point}',),)
                                           );
 
                                               print(selectedanswers);
-                                          _submitApi.submit(snapshot.data.data.quiz.id,"Name",false,selectedanswers);
+                                              print('${widget.nickname}');
+                                          _submitApi.submit(snapshot.data.data.quiz.id,widget.nickname,widget.anonymous,selectedanswers);
 
                                         });
-
-
                                         }
-
                                       });
 
                                     });

@@ -5,6 +5,12 @@ import 'package:ug_quizapp/DataFetch/fetechapi.dart';
 import 'package:ug_quizapp/UI/startquiz.dart';
 
 class SelectQuiz extends StatefulWidget {
+  final  nickname;
+  final  anonymous;
+
+  const SelectQuiz({Key key, this.nickname, this.anonymous}) : super(key: key);
+
+
 
   @override
   _SelectQuizState createState() => _SelectQuizState();
@@ -32,7 +38,7 @@ class _SelectQuizState extends State<SelectQuiz> {
                         onTap: (){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => StartQuiz(slug: snapshot.data.data.all[index].slug,)),
+                            MaterialPageRoute(builder: (context) => StartQuiz(slug: snapshot.data.data.all[index].slug,  anonymous: widget.anonymous, nickname: widget.nickname,)),
                           );
                         },
                         child: Container( height: MediaQuery.of(context).size.height*0.1,
