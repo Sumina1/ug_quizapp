@@ -41,21 +41,24 @@ class _SelectQuizState extends State<SelectQuiz> {
                             MaterialPageRoute(builder: (context) => StartQuiz(slug: snapshot.data.data.all[index].slug,  anonymous: widget.anonymous, nickname: widget.nickname,)),
                           );
                         },
-                        child: Container( height: MediaQuery.of(context).size.height*0.1,
-                            width: MediaQuery.of(context).size.width*0.1,
-                            decoration: BoxDecoration(
-                                boxShadow: [BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3), //color of shadow
-                                  spreadRadius: 5, //spread radius
-                                  blurRadius: 7, // blur radius
-                                  offset: Offset(0, 2), // changes position of shadow
-                                )],
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white
-                            ),
-                         // color: Color(int.parse(snapshot.data.data.banner.backgroundColor
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          child: Container( height: MediaQuery.of(context).size.height*0.1,
+                              width: MediaQuery.of(context).size.width*0.1,
+                              decoration: BoxDecoration(
+                                  boxShadow: [BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3), //color of shadow
+                                    spreadRadius: 5, //spread radius
+                                    blurRadius: 7, // blur radius
+                                    offset: Offset(0, 2), // changes position of shadow
+                                  )],
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white
+                              ),
+                           // color: Color(int.parse(snapshot.data.data.banner.backgroundColor
 
-                            child: Center(child: Text('${snapshot.data.data.all[index].name}',)))
+                              child: Center(child: Text('${snapshot.data.data.all[index].name}',))),
+                        )
 
                       );
 
