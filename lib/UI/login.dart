@@ -58,8 +58,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: ElevatedButton(
                   child: Text('Skip Login', style: TextStyle(color: Colors.pink),),
-
-
                   onPressed: () {
                     Navigator.push(
                       context,

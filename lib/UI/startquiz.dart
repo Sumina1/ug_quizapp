@@ -46,11 +46,14 @@ var animationcontroller;
    double beginval = 0.0;
    double endval = 0.0;
    String url = '';
-   int correctAnswerIndex;
-   bool wrongOptionIndex;
+    bool fifty = false;
+  String options = '';
    int qsn = 1;
-
-
+   List option;
+   String optionvalue;
+  int removecount = 0;
+  bool canpeekaboo = true;
+  bool canfiftyfifty = true;
 
    @override
   void initState() {
@@ -87,9 +90,9 @@ var animationcontroller;
     _wrongContainerController.dispose();
 
   }
+
   @override
   Widget build(BuildContext context) {
-
     return  SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -108,16 +111,24 @@ var animationcontroller;
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
 
-                            Text('Questions: ${qsn}/ ${snapshot.data.data.quiz.questions.length}'),
+                            Text('Questions: ${qsn}/ ${snapshot.data.data.quiz.questions.length}', style: TextStyle(fontSize: 20)),
 
                             ElevatedButton(
-                              child: Text('  %', style: TextStyle(fontSize: 20, color: Colors.pink),),
+
+                              child: Text('％', style: TextStyle(fontSize: 20, color: Colors.white),),
                               onPressed: () {
+                                if(canfiftyfifty==true){
+                                setState(() {
+                                  if(snapshot.data.data.quiz.questions[initialindex].options.length == 4) {
+                                    fifty=true;
+                                }
+                                  canfiftyfifty=false;
+                                });
 
-
-
+                                }
                               },
                               style: ElevatedButton.styleFrom(
+                                primary: Colors.pink,
                                 shape:  RoundedRectangleBorder(
                                   borderRadius:  BorderRadius.circular(10.0),
                                 ),
@@ -126,17 +137,21 @@ var animationcontroller;
                             ElevatedButton.icon(
                                 icon: Icon(
                                   Icons.search,
-                                  color: Colors.pink,
+                                  color: Colors.white,
                                   size: 24.0,
                                 ),
                                 onPressed: ()  async{
+                                  if(canpeekaboo==true){
                               var value = await getHelpline.createPeekaboo(snapshot.data.data.quiz.questions[initialindex].id);
                               peekaboovalues=value.data;
+                              canpeekaboo=false;
                               setState(() {
                               });
-                            },
+                            }},
                                 label: Text(''),
                               style: ElevatedButton.styleFrom(
+                                primary: Colors.pink,
+
                                 shape:  RoundedRectangleBorder(
                                   borderRadius:  BorderRadius.circular(10.0),
                                 ),
@@ -157,9 +172,6 @@ var animationcontroller;
                             primary: false,
                             itemBuilder: (BuildContext context, int index){
 
-                              if(snapshot.hasData){
-
-                              }
 
                               if(snapshot.data.data.quiz.                                                                                                                                                   questions[initialindex].media==""){
                                 url="https://i.ytimg.com/vi/QggJzZdIYPI/mqdefault.jpg";
@@ -168,7 +180,6 @@ var animationcontroller;
                                 url=snapshot.data.data.quiz.questions[initialindex].media;
                               }
                               if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==true){
-                                print(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect);
                                 containercolor= rightColor;
                                 animationcontroller= _containerOffsetAnimation;
 
@@ -180,14 +191,14 @@ var animationcontroller;
 
                               }
                               else{
-                               animationcontroller= _containerOffsetAnimation;
+                                animationcontroller= _containerOffsetAnimation;
                                 containercolor=Colors.white;
 
                               }
                               if(peekaboovalues!=null){
                                 peekaboovalue="${peekaboovalues[index].percent.toString()}%";
                               }
-                              return Padding(
+                              Widget questionoption = Padding(
 
                                 padding:  EdgeInsets.all(10),
                                 child: SlideTransition(
@@ -195,7 +206,12 @@ var animationcontroller;
                                   transformHitTests: false,
                                   child: InkWell(
                                     onTap: (){
-                                      qsn = qsn+1;
+                                      removecount=0;
+
+
+                                      if(snapshot.data.data.quiz.questions.length != qsn){
+                                        qsn= qsn +1;
+                                      }
 
                                       Map answers = {'questionId':snapshot.data.data.quiz.questions[initialindex].id,
                                         'answerId':snapshot.data.data.quiz.questions[initialindex].options[index].id};
@@ -203,7 +219,7 @@ var animationcontroller;
                                       if( selectedanswers.length==0
                                       ){
                                         //map((x) => Answer.fromJson(x)
-                                      selectedanswers =[answers];}
+                                        selectedanswers =[answers];}
                                       else{
                                         selectedanswers.add(answers);
                                       }
@@ -224,7 +240,7 @@ var animationcontroller;
 
 
                                         });
-                                        
+
                                       }
                                       setState(() {
                                         rightColor=Colors.green;
@@ -233,6 +249,7 @@ var animationcontroller;
 
                                       Future.delayed(const Duration(seconds: 1), () {
                                         setState(() {
+                                          fifty=false;
                                           peekaboovalues= null;
                                           peekaboovalue="";
                                           containercolor=Colors.white;
@@ -256,14 +273,13 @@ var animationcontroller;
 
                                           }
                                           else{
-                                            Future.delayed(const Duration(seconds: 3), () {
+                                            Future.delayed(const Duration(milliseconds:300), () {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(builder: (context) => Welcome(scores: 'Your score is:  ${points + snapshot.data.data.quiz.questions[initialindex].options[index].point}',),)
                                               );
 
-                                              print(selectedanswers);
-                                              print('${widget.nickname}');
+
                                               _submitApi.submit(snapshot.data.data.quiz.id,widget.nickname,widget.anonymous,selectedanswers);
 
                                             });
@@ -275,12 +291,12 @@ var animationcontroller;
 
                                     },
 
-                                    child: Container(
+                                    child:  Container(
                                       height: MediaQuery.of(context).size.height*0.1,
                                       width: MediaQuery.of(context).size.width*0.2,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                        color: containercolor,
+                                          color: containercolor,
                                           borderRadius: BorderRadius.circular(20),
                                           border: Border.all(color: Colors.black,)),
                                       child: Row(
@@ -295,7 +311,23 @@ var animationcontroller;
                                       ),),
                                   ),
                                 ),
-                              );}
+                              );
+
+                              if(fifty==true){
+                                print("${fifty}boool ");
+                                print("${removecount}boool ");
+
+                                if(removecount<2){
+
+                                  if(snapshot.data.data.quiz.questions[initialindex].options[index].isCorrect==false){
+                                  removecount=removecount+1;
+                             questionoption=Text("");}}
+
+                              }
+
+
+
+                              return questionoption;}
                         ),
 
                       ],
