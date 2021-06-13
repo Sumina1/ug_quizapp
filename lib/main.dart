@@ -8,7 +8,5 @@ const BASE_URL = 'https://staging.ugbazaar.com/api/V2/quiz';
 
 
 void main() {
-  runApp(MaterialApp(home: SelectQuiz(),));
+  runApp(MaterialApp(home: LoginPage(),));
 }
-
-
