@@ -10,6 +10,12 @@ const RESOURCES = {
 "version.json": "eb585da96a9f64dff8c2e342cc531813",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "main.dart.js": "97f62044683c6381828e9c4b528e4ba3",
+"web/icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
+"web/icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
+"web/favicon.png": "5dcef449791fa27946b3d35ad8803796",
+"web/manifest.json": "b2ceaa03f392ef72ab2bf3e9b081378a",
+"web/index.html": "2689690ea9316de7ea9587966c59ba5d",
+"/": "1aa125b692a23894c62c3af1dd659913",
 "assets/AssetManifest.json": "9cb7199f0efa249dccbc5a1fe16edce4",
 "assets/packages/flutter_signin_button/assets/logos/facebook_new.png": "e1dff5c319a9d7898aee817f624336e3",
 "assets/packages/flutter_signin_button/assets/logos/google_dark.png": "c32e2778b1d6552b7b4055e49407036f",
@@ -27,9 +33,8 @@ const RESOURCES = {
 "assets/FontManifest.json": "5a32d4310a6f5d9a6b651e75ba0d7372",
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
 "assets/NOTICES": "8e00b4afca8f083743d4f07f1c89787a",
-"manifest.json": "30e09d44998d24f28ad9931cd78e2b63",
-"index.html": "ddaae1bb5b0b55e109abea9431353f02",
-"/": "ddaae1bb5b0b55e109abea9431353f02"
+"manifest.json": "7de2d782e9c4c47275c470b9d29a0d2a",
+"index.html": "1aa125b692a23894c62c3af1dd659913"
 };
 
 // The application shell files that are downloaded before a service worker can
